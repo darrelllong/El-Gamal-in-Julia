@@ -97,6 +97,12 @@ function safePrime(low, high)
     return 2 * p + 1
 end
 
+#=
+A generator must not  e congruent to 1 for any of its powers that are
+proper divisors of p – 1.  Since this is safe prime, there are only
+two: 2 and (p – 1) / 2. The number of such generators is 𝜑(p – 1).
+=#
+
 function generator(n, p)
     g = n
     q = (p - 1) ÷ 2
@@ -106,6 +112,18 @@ function generator(n, p)
     g
 end
 
+#=
+Generate an efficient description of a cyclic group G of order p, with generator r.
+
+Choose a random integer a ∊ {(p – 1)/2, ..., p − 1}
+
+Compute b = r^a
+
+The public key consists of the values (p, r, b)
+
+The private key consists of the values (p, a)
+=#
+
 function keys(k)
     p = safePrime(big"2"^(k - 1), big"2"^k - 1)
     r = generator(big"2"^16 + 1, p)
@@ -114,6 +132,16 @@ function keys(k)
     ((p, a), (p, r, b))
 end
 
+#=
+Choose a random k ∊ {1, ..., p – 2}
+
+Compute 𝛾 = r^k (mod p)
+
+Compute 𝛿 = m b^k (mod p)
+
+The encryped message is (𝛾, 𝛿)
+=#
+
 function encrypt(m, key)
     (p, r, b) = key
     k = rand(1:p - 2)
@@ -121,6 +149,10 @@ function encrypt(m, key)
     𝛿 = (m * powerMod(b, k, p)) % p
     (𝛾, 𝛿)
 end
+
+#=
+The decrypted message is 𝛿 𝛾^(p – 1 – a) (mod p)
+=#
 
 function decrypt(m, key)
     (p, a) = key
@@ -167,4 +199,3 @@ for m in eachline()
     t = decode(decrypt(c, prv)); println("De[$c] = $t")
     print(">> ")
 end
-
