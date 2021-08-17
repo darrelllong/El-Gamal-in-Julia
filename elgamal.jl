@@ -56,6 +56,11 @@ function witness(a, n)
     x ≠ 1
 end
 
+#=
+Miller-Rabin probabilistic primality test: the chance of being wrong is ≈ 1/4 each pass through
+the loop.
+=#
+
 function isPrime(n, k)
     if n < 2 || (n ≠ 2 && iseven(n)) # 0, 1, and even except for 2 are not prime.
         return false
@@ -72,7 +77,7 @@ function isPrime(n, k)
 end
 
 #=
-We need a random prime number in [low, high] and for now a 1/4^100 chance of a composite is
+We need a random prime number in [low, high] and for now a 4^–100 chance of a composite is
 good enough.
 =#
 
@@ -98,9 +103,9 @@ function safePrime(low, high)
 end
 
 #=
-A generator must not  e congruent to 1 for any of its powers that are
-proper divisors of p – 1.  Since this is safe prime, there are only
-two: 2 and (p – 1) / 2. The number of such generators is 𝜑(p – 1).
+A generator must not be congruent to 1 for any of its powers that are
+proper divisors of p – 1.  Since p is safe prime, there are only two:
+2 and (p – 1) / 2. The number of such generators is 𝜑(p – 1).
 =#
 
 function generator(n, p)
@@ -139,7 +144,7 @@ Compute 𝛾 = r^k (mod p)
 
 Compute 𝛿 = m b^k (mod p)
 
-The encryped message is (𝛾, 𝛿)
+The encrypted message is (𝛾, 𝛿)
 =#
 
 function encrypt(m, key)
