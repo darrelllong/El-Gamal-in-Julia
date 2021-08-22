@@ -33,7 +33,7 @@ than once.
 # Usage
 
 ```
-(prv, pub) = keys(bits)
+(prv, pub) = keys(safety, bits)
 
 c = encrypt(encode("string"), pub)
 
