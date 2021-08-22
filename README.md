@@ -16,8 +16,9 @@ Originally written for the students at the University of California, Santa Cruz.
 }
 ```
 
-The implementation uses *safe primes* for creating the keys. This can be a little
-slow, but you do not need to do this more than once.
+The implementation has the ability to use *safe primes* for creating
+the keys. This can be a little slow, but you do not need to do this more
+than once.
 
 ```
 @misc{cryptoeprint:2001:007,
