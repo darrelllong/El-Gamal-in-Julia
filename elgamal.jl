@@ -129,8 +129,9 @@ The public key consists of the values (p, r, b)
 The private key consists of the values (p, a)
 =#
 
-function keys(k)
-    p = safePrime(big"2"^(k - 1), big"2"^k - 1)
+function keys(safe, k)
+    f = safe ? safePrime : randomPrime
+    p = f(big"2"^(k - 1), big"2"^k - 1)
     r = generator(big"2"^16 + 1, p)
     a = rand((p - 1) ÷ 2:p - 1)
     b = powerMod(r, a, p)
@@ -193,7 +194,7 @@ print("How many bits? ")
 
 bits = parse(Int64, readline())
 
-(prv, pub) = keys(bits)
+(prv, pub) = keys(false, bits)
 
 println("pub = $pub")
 println("prv = $prv")
