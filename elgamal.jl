@@ -180,7 +180,7 @@ function encode(s)
     sum::BigInt = 0
     pow::BigInt = 1
     for c in s
-        sum += pow * (0xAA ⊻ BigInt(c))
+        sum += pow * BigInt(c)
         pow *= 256
     end
     sum
