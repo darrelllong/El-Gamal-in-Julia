@@ -2,6 +2,16 @@
 
 using Random
 
+# mod must always be positive
+
+function mod(a, n)
+    if (t = a % n) < 0
+        n + t
+    else
+        t
+    end
+end
+
 #=
 a^b (mod n) using the method of repeated squares.
 
@@ -16,9 +26,9 @@ function powerMod(a, d, n)
     p = a # Powers of a
     while d > 0
         if isodd(d) # 1 bit in the exponent
-           v = (v * p) % n
+           v = mod(v * p, n)
         end
-        p = p^2 % n # Next power of two
+        p = mod(p^2, n) # Next power of two
         d >>>= 1
     end
     v
@@ -30,7 +40,7 @@ Greatest common divisor, Euclidean version.
 
 function gcd(a, b)
     while b ≠ 0
-        a, b = b, a % b
+        a, b = b, mod(a, b)
     end
     a
 end
@@ -152,7 +162,7 @@ function encrypt(m, key)
     (p, r, b) = key
     k = rand(1:p - 2)
     𝛾 = powerMod(r, k, p)
-    𝛿 = (m * powerMod(b, k, p)) % p
+    𝛿 = mod(m * powerMod(b, k, p), p)
     (𝛾, 𝛿)
 end
 
@@ -163,7 +173,7 @@ The decrypted message is 𝛿 𝛾^(p – 1 – a) (mod p)
 function decrypt(m, key)
     (p, a) = key
     (𝛾, 𝛿) = m
-    (powerMod(𝛾, p - 1 - a, p) * 𝛿) % p
+    mod((powerMod(𝛾, p - 1 - a, p) * 𝛿), p)
 end
 
 function encode(s)
@@ -184,7 +194,7 @@ integer and just pull off the digits.
 function decode(n)
     s = ""
     while n > 0
-        s = s * Char(0xAA ⊻ (n % 256))
+        s = s * Char(mod(n, 256))
         n ÷= 256
     end
     s
